@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasir Restoran Padang</title>
+    
+    <!-- PWA Manifest & Theme Color -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#D97706">
+
+    <!-- Tailwind CSS & FontAwesome -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Eksternal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased">
+
+    <!-- Header / Navbar -->
+    <header class="bg-amber-600 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white text-amber-600 p-2 rounded-xl shadow">
+                    <i class="fa-solid fa-utensils text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold">Rumah Makan Padang</h1>
+                    <p class="text-xs text-amber-100">Sistem Kasir & Restoran</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button onclick="bukaModalInstall()" class="bg-amber-700 hover:bg-amber-800 text-white px-3 py-2 rounded-lg text-sm font-medium transition flex items-center space-x-1 shadow-sm">
+                    <i class="fa-solid fa-download"></i>
+                    <span class="hidden sm:inline">Unduh App</span>
+                </button>
+                <button onclick="bukaModalLaporan()" class="bg-white text-amber-700 hover:bg-amber-50 px-3 py-2 rounded-lg text-sm font-semibold transition flex items-center space-x-1 shadow-sm">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Laporan Harian</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner Utama -->
+    <div class="max-w-7xl mx-auto px-4 mt-4">
+        <div class="bg-gradient-to-r from-amber-500 to-amber-600 rounded-2xl p-6 text-white shadow-lg flex flex-col md:flex-row items-center justify-between">
+            <div class="mb-4 md:mb-0 text-center md:text-left">
+                <h2 class="text-2xl font-bold mb-1">Kelola Pesanan & Tamu dengan Cepat</h2>
+                <p class="text-amber-100 text-sm">Pilih menu di bawah, masukkan ke keranjang, dan selesaikan transaksi kasir.</p>
+            </div>
+            <button onclick="alert('Sesi Kasir Aktif! Silakan pilih menu di bawah.')" class="bg-white text-amber-700 hover:bg-amber-50 font-bold px-6 py-3 rounded-full shadow transition transform hover:scale-105">
+                <i class="fa-solid fa-cash-register mr-2"></i> Mulai Sesi Kasir
+            </button>
+        </div>
+    </div>
+
+    <!-- Konten Utama: Menu & Keranjang -->
+    <main class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Bagian Kiri: Daftar Menu & Filter Kategori -->
+        <div class="lg:col-span-2 space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-xl shadow-sm gap-3">
+                <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-book-open text-amber-600 mr-2"></i> Daftar Menu Restoran</h3>
+                
+                <!-- Tombol Pemisah / Filter Kategori -->
+                <div class="flex items-center space-x-2">
+                    <button onclick="filterKategori('Semua')" id="btn-semua" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-600 text-white transition shadow-sm">Semua</button>
+                    <button onclick="filterKategori('Makanan')" id="btn-makanan" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Makanan</button>
+                    <button onclick="filterKategori('Minuman')" id="btn-minuman" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Minuman</button>
+                    
+                    <button onclick="bukaModalTambahMenu()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-1.5 rounded-lg transition font-medium shadow-sm ml-2">
+                        <i class="fa-solid fa-plus mr-1"></i> Tambah
+                    </button>
+                </div>
+            </div>
+
+            <!-- Kontainer Menu Dinamis -->
+            <div id="daftar-menu" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- Dimuat otomatis oleh JavaScript -->
+            </div>
+        </div>
+
+        <!-- Bagian Kanan: Keranjang Pesanan / Kasir -->
+        <div class="bg-white p-5 rounded-2xl shadow-md h-fit sticky top-20">
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <h3 class="font-bold text-lg text-slate-800"><i class="fa-solid fa-cart-shopping text-amber-600 mr-2"></i> Pesanan Saat Ini</h3>
+                <span id="jumlah-item-badge" class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full">0 item</span>
+            </div>
+
+            <div id="item-keranjang" class="space-y-3 max-h-72 overflow-y-auto pr-1 divide-y divide-slate-100">
+                <p class="text-slate-400 text-center py-6 text-sm">Keranjang masih kosong.<br>Silakan pilih menu di samping.</p>
+            </div>
+
+            <div class="border-t pt-4 mt-4 space-y-2">
+                <div class="flex justify-between text-sm text-slate-600">
+                    <span>Subtotal</span>
+                    <span id="subtotal-harga">Rp 0</span>
+                </div>
+                <div class="flex justify-between text-base font-bold text-slate-900 border-t pt-2">
+                    <span>Total Pembayaran</span>
+                    <span id="total-harga" class="text-amber-600">Rp 0</span>
+                </div>
+            </div>
+
+            <div class="mt-6 space-y-2">
+                <button onclick="prosesPembayaran()" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl shadow transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-check-to-slot"></i>
+                    <span>Proses Pembayaran</span>
+                </button>
+                <button onclick="kosongkanKeranjang()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-semibold py-2 rounded-xl transition">
+                    Batalkan / Kosongkan
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Tambah Menu -->
+    <div id="modal-tambah-menu" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl animate-fade-in">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-utensils text-amber-600 mr-2"></i> Tambah Menu Baru</h3>
+                <button onclick="tutupModalTambahMenu()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <form id="form-tambah-menu" onsubmit="tambahkanMenuBaru(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Menu</label>
+                    <input type="text" id="input-nama" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none" placeholder="Contoh: Rendang Daging Sapi">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Kategori</label>
+                    <select id="input-kategori" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+                        <option value="Makanan Utama">Makanan Utama</option>
+                        <option value="Lauk Pendamping">Lauk Pendamping</option>
+                        <option value="Sayur & Lalapan">Sayur & Lalapan</option>
+                        <option value="Minuman Tradisional">Minuman Tradisional</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Harga (Rp)</label>
+                    <input type="number" id="input-harga" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none" placeholder="Contoh: 25000">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">URL Gambar / Foto</label>
+                    <input type="url" id="input-gambar" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none" placeholder="https://images.mediadirhub.com/vibe/...">
+                </div>
+                <div class="flex space-x-3 pt-2">
+                    <button type="button" onclick="tutupModalTambahMenu()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold py-2 rounded-xl text-sm transition">Batal</button>
+                    <button type="submit" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 rounded-xl text-sm shadow transition">Simpan Menu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Laporan Harian -->
+    <div id="modal-laporan" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4 border-b pb-3">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800"><i class="fa-solid fa-chart-line text-amber-600 mr-2"></i> Laporan Harian Kasir</h3>
+                    <p class="text-xs text-slate-500" id="tanggal-laporan">Hari Ini</p>
+                </div>
+                <button onclick="tutupModalLaporan()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+                <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl text-center">
+                    <p class="text-xs text-amber-600 font-semibold uppercase">Total Pendapatan</p>
+                    <h4 id="laporan-total-omzet" class="text-lg font-bold text-amber-800 mt-1">Rp 0</h4>
+                </div>
+                <div class="bg-blue-50 border border-blue-200 p-4 rounded-xl text-center">
+                    <p class="text-xs text-blue-600 font-semibold uppercase">Jumlah Transaksi</p>
+                    <h4 id="laporan-jumlah-transaksi" class="text-lg font-bold text-blue-800 mt-1">0</h4>
+                </div>
+                <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl text-center col-span-2 sm:col-span-1">
+                    <p class="text-xs text-emerald-600 font-semibold uppercase">Rata-rata Transaksi</p>
+                    <h4 id="laporan-rata-rata" class="text-lg font-bold text-emerald-800 mt-1">Rp 0</h4>
+                </div>
+            </div>
+
+            <h4 class="font-bold text-sm text-slate-700 mb-2">Riwayat Transaksi Masuk Hari Ini</h4>
+            <div id="riwayat-transaksi-container" class="space-y-2 mb-6 max-h-48 overflow-y-auto pr-1">
+                <p class="text-slate-400 text-center py-4 text-xs">Belum ada transaksi tercatat hari ini.</p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 pt-3 border-t">
+                <button onclick="cetakLaporanHarian()" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2.5 rounded-xl text-sm shadow transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-print"></i>
+                    <span>Cetak / Print Laporan</span>
+                </button>
+                <button onclick="resetLaporanHarian()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold px-4 py-2.5 rounded-xl text-sm transition">
+                    Reset Data Hari Ini
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Install PWA -->
+    <div id="modal-install" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-download text-amber-600 mr-2"></i> Unduh & Instal Aplikasi</h3>
+                <button onclick="tutupModalInstall()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <p class="text-sm text-slate-600 mb-4">Aplikasi kasir ini dapat diinstal di perangkat **Android, Windows, maupun macOS** agar dapat diakses dengan cepat tanpa membuka browser.</p>
+            
+            <div class="space-y-3 text-sm text-slate-700 mb-6 bg-slate-50 p-4 rounded-xl border">
+                <p class="font-semibold text-amber-800"><i class="fa-brands fa-android mr-1"></i> Pengguna Android:</p>
+                <p class="text-xs text-slate-600">Ketuk ikon menu (tiga titik di pojok kanan atas Chrome) 👉 Pilih **"Install Aplikasi"** atau **"Tambahkan ke Layar Utama"**.</p>
+                <hr class="my-2">
+                <p class="font-semibold text-amber-800"><i class="fa-solid fa-desktop mr-1"></i> Pengguna Komputer (Windows/Mac):</p>
+                <p class="text-xs text-slate-600">Klik ikon komputer dengan panah unduh di bilah alamat browser (address bar) atau pilih menu browser 👉 **"Install Kasir Restoran Padang..."**.</p>
+            </div>
+
+            <button onclick="tutupModalInstall()" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2.5 rounded-xl text-sm shadow transition">Mengerti & Tutup</button>
+        </div>
+    </div>
+
+    <!-- Script Eksternal -->
+    <script src="script.js"></script>
+</body>
+</html>
