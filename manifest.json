@@ -1,32 +1,20 @@
 {
-  "id": "/iqba777/",
-  "name": "Kasir Restoran Padang",
-  "short_name": "Kasir Padang",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#F1F5F9",
-  "theme_color": "#D97706",
-  "description": "Sistem Kasir &amp; Restoran Padang untuk mengelola pesanan, menu, dan laporan harian.",
+  "short_name": "MDN",
+  "name": "MDN Web Docs",
   "icons": [
     {
-      "id": "kasir-padang-icon-192",
-      "src": "icon.jpg",
+      "src": "/favicon-192x192.png",
       "sizes": "192x192",
-      "type": "image/jpeg",
-      "purpose": "any maskable"
+      "type": "image/png"
     },
     {
-      "id": "kasir-padang-icon-512",
-      "src": "icon.jpg",
+      "src": "/favicon-512x512.png",
       "sizes": "512x512",
-      "type": "image/jpeg",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
-  ]
-}
-      "sizes": "512x512",
-      "type": "image/jpeg",
-      "purpose": "any maskable"
-    }
-  ]
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "black",
+  "background_color": "white"
 }
