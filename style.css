@@ -1,0 +1,50 @@
+/* Custom Styles & Animations for Padang Restaurant POS */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.2s ease-out forwards;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Print Styles for Daily Reports */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #modal-laporan, #modal-laporan * {
+        visibility: visible;
+    }
+    #modal-laporan {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white !important;
+        box-shadow: none !important;
+    }
+    #modal-laporan button {
+        display: none !important;
+    }
+}
