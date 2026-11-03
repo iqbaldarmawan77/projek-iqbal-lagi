@@ -6,7 +6,7 @@
   "display": "standalone",
   "background_color": "#F1F5F9",
   "theme_color": "#D97706",
-  "description": "Sistem Kasir & Restoran Padang untuk mengelola pesanan, menu, dan laporan harian.",
+  "description": "Sistem Kasir &amp; Restoran Padang untuk mengelola pesanan, menu, dan laporan harian.",
   "icons": [
     {
       "id": "kasir-padang-icon-192",
@@ -18,6 +18,12 @@
     {
       "id": "kasir-padang-icon-512",
       "src": "icon.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
       "sizes": "512x512",
       "type": "image/jpeg",
       "purpose": "any maskable"
